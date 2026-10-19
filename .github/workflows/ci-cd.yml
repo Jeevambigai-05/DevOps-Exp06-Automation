@@ -1,3 +1,4 @@
+
 name: DevOps CI-CD Pipeline
 
 on:
@@ -8,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-test:
+  build-test-docker:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,5 +30,15 @@ jobs:
       - name: Run Tests
         run: pytest -v
 
+      - name: Set Up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: devops-exp06-app:latest
+
       - name: Pipeline Completed
-        run: echo "Build and Testing Completed Successfully"
+        run: echo "Build, Testing, and Docker Image Creation Completed Successfully"
